@@ -1,5 +1,5 @@
 # CORE-COMPUTE_NATIVE
-- this project native binding generator to core-compute api
+- this project is native binding generator for core-compute api
 
 ## GETTING STARTED
 - because core-compute api are Rust macro function , and we are not able to use Rust macros in C directly this project aims to give you
