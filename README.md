@@ -23,10 +23,4 @@ cargo build --release
 
 ** core_compute_native.h will be found at target dir **
 
-```
-```
-```
-```
-```
-```
 
