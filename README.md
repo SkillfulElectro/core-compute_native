@@ -6,7 +6,7 @@
 flexible binding generator
 - first you have to set how many compute functions you will need in C/C++ side of your project by 
 ```shell
-export NUM_CORE_COMPUTE_REQ=how much you want
+export NUM_CORE_COMPUTE_REQ={how many functions for api you need}
 ```
 ** if you dont set any by default the build process will consider one function you will need **
 
