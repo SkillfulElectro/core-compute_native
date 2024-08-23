@@ -8,7 +8,7 @@ name = "core_compute_native"
 crate-type = ["cdylib"]
 
 [dependencies]
-core-compute = {path = "../core-compute/"}
+core-compute = {path = "src/core-compute/"}
 wgpu = "22"
 pollster = "0.2"
 bytemuck = { version = "1.16", features = ["derive"] }
