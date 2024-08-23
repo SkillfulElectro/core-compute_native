@@ -12,7 +12,7 @@ export NUM_CORE_COMPUTE_REQ=how much you want
 
 - now you have to set for all of those compute functions starting from 0 , how much CInfo var you going to give as parameter to 
 ```shell
-export NUM_CORE_{index of the function}
+export NUM_CORE_{index of the function}={number of CInfo paras you want to pass to func}
 ```
 ** if you dont set it by default it will set 2 for each of them **
 
