@@ -2,8 +2,8 @@
 - this project is native binding generator for core-compute api
 
 ## GETTING STARTED
-- because core-compute api are Rust macro function , and we are not able to use Rust macros in C directly this project aims to give you
-flexible binding generator
+- because core-compute apis are Rust macro functions , and we are not able to use Rust macros in C directly this project aims to give you
+flexible binding generator for its api
 - first you have to set how many compute functions you will need in C/C++ side of your project by 
 ```shell
 export NUM_CORE_COMPUTE_REQ={how many functions for api you need}
@@ -25,4 +25,4 @@ cargo build --release
 
 
 ## NOTE 
-- this project is bundled with special version of core-compute api
+- this project is bundled with core-compute v0.5.0 for now
