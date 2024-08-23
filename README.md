@@ -24,3 +24,5 @@ cargo build --release
 ** core_compute_native.h will be found at target dir **
 
 
+## NOTE 
+- this project is bundled with special version of core-compute api
