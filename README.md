@@ -25,4 +25,5 @@ cargo build --release
 
 
 ## NOTE 
-- this project is bundled with core-compute v0.5.2(native edition) 
+- this project is bundled with core-compute v0.5.2(native edition)
+- core-compute native edition usage in Rusty API is not feasible without some unsafe operations
