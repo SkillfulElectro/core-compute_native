@@ -82,19 +82,19 @@ impl Default for compute_config{
     fn default() -> Self {
         let instance = wgpu::Instance::default();
         let adapter = pollster::block_on(instance
-                .request_adapter(&wgpu::RequestAdapterOptions::default()))
-                .expect("ERROR : failed to get adapter");
+            .request_adapter(&wgpu::RequestAdapterOptions::default()))
+            .expect("ERROR : failed to get adapter");
         let (device, queue) = pollster::block_on(adapter
-                .request_device(
-                    &wgpu::DeviceDescriptor {
-                        label: None,
-                        required_features: wgpu::Features::empty(),
-                        required_limits: wgpu::Limits::downlevel_defaults(),
-                        memory_hints: wgpu::MemoryHints::MemoryUsage,
-                    },
-                    None,
-                ))
-                .expect("ERROR : Adapter could not find the device");
+            .request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    required_features: wgpu::Features::empty(),
+                    required_limits: wgpu::Limits::downlevel_defaults(),
+                    memory_hints: wgpu::MemoryHints::MemoryUsage,
+                },
+                None,
+            ))
+            .expect("ERROR : Adapter could not find the device");
 
         Self {
             _wgpu_instance : instance ,
@@ -124,7 +124,7 @@ macro_rules! compute_ext {
             let device = $config._wgpu_device;
             let queue = $config._wgpu_queue;
 
-            
+
             let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
                 label: Some("Shader"),
                 source: wgpu::ShaderSource::Wgsl($kernel.code.into()),
@@ -148,7 +148,7 @@ macro_rules! compute_ext {
             let mut staging_buffers : Vec<wgpu::Buffer> = Vec::new();
             let mut sizes : Vec<wgpu::BufferAddress> = Vec::new();
             let mut storage_buffers : Vec<wgpu::Buffer> = Vec::new();
-            
+
             #[derive(Debug)]
             struct buf_index {
                 index: usize ,
@@ -199,38 +199,38 @@ macro_rules! compute_ext {
                         bind : $data.bind
                     });
 
-                )*
+                    )*
 
 
-                    for group in grouponized.keys(){
-                        let bind_group_layout = compute_pipeline.get_bind_group_layout(group.clone());
+                        for group in grouponized.keys(){
+                            let bind_group_layout = compute_pipeline.get_bind_group_layout(group.clone());
 
-                        let mut entries : Vec<wgpu::BindGroupEntry> = Vec::new();
-                        let data = grouponized.get(&group).expect("ERROR : smth went wrong !");
-                        for GroupEntry in data {
-                            entries.push(wgpu::BindGroupEntry{
-                                binding : GroupEntry.bind , 
-                                resource : storage_buffers[GroupEntry.index].as_entire_binding(),
+                            let mut entries : Vec<wgpu::BindGroupEntry> = Vec::new();
+                            let data = grouponized.get(&group).expect("ERROR : smth went wrong !");
+                            for GroupEntry in data {
+                                entries.push(wgpu::BindGroupEntry{
+                                    binding : GroupEntry.bind , 
+                                    resource : storage_buffers[GroupEntry.index].as_entire_binding(),
+                                });
+                            }
+                            let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+                                label: None,
+                                layout: &bind_group_layout,
+                                entries: entries.as_slice() ,
                             });
-                        }
-                        let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-                            label: None,
-                            layout: &bind_group_layout,
-                            entries: entries.as_slice() ,
-                        });
 
-                        cpass.set_pipeline(&compute_pipeline);
-                        cpass.set_bind_group(group.clone(), &bind_group, &[]);
+                            cpass.set_pipeline(&compute_pipeline);
+                            cpass.set_bind_group(group.clone(), &bind_group, &[]);
 
 
                     }
-                    
-
-                    
 
 
 
-                    
+
+
+
+
                     cpass.insert_debug_marker("debug_marker");
                     cpass.dispatch_workgroups($kernel.x, $kernel.y, $kernel.z); 
             }
@@ -245,6 +245,7 @@ macro_rules! compute_ext {
 
 
 
+            let mut handles : Vec<std::thread::JoinHandle<()>> = Vec::new();
 
             let mut index = 0;
             $(
@@ -259,13 +260,23 @@ macro_rules! compute_ext {
                     let data = buffer_slice.get_mapped_range();
                     let casted_data = bytemuck::cast_slice(&data).to_vec();
 
-                    for (i, &value) in casted_data.iter().enumerate() {
-                        $data.data[i] = value;
-                    }
+
+                    let handle = std::thread::spawn(move ||{
+                        use rayon::prelude::*;
+
+
+                        $data.data.par_iter_mut().zip(casted_data.par_iter()).for_each(|(d, &value)| {
+                            *d = value;
+                        });
+                    });
+                    handles.push(handle);
+
+
 
 
                     drop(data);
-                    staging_buffers[index].unmap(); 
+                    staging_buffers[index].unmap();
+                     
                 } else {
                     panic!("failed to run compute on gpu!")
                 }
@@ -273,6 +284,10 @@ macro_rules! compute_ext {
                 index += 1;
                 )*
 
+            for handle in handles {
+                handle.join();
+            }
+            
 
 
         }
