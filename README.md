@@ -25,4 +25,4 @@ cargo build --release
 
 
 ## NOTE 
-- this project is bundled with core-compute v0.5.0 for now
+- this project is bundled with core-compute v0.5.2(native edition) 
