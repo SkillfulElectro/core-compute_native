@@ -1,4 +1,4 @@
-# core-compute: NATIVE EDITION
+# core-compute : NATIVE EDITION
 - fast , simple and cross-platform parallel computing library native edition
 - this edition aims to provide more performance for C API
 
