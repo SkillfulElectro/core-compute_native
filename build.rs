@@ -155,7 +155,7 @@ pub extern "C" fn compute"#.to_string();
         function_def.push_str("\n\n");
         let mut macro_paras = String::new();
         for para in 0..data_amount {
-            let para_def = format!(", &mut dat{}" , para);
+            let para_def = format!(", dat{}" , para);
             macro_paras.push_str(&para_def);
         }
         let mut macro_def = String::new();

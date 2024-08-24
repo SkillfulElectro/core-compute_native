@@ -1,6 +1,6 @@
 [package]
 name = "core-compute_native"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 [lib]
@@ -13,6 +13,7 @@ wgpu = "22"
 pollster = "0.2"
 bytemuck = { version = "1.16", features = ["derive"] }
 flume = "0.11"
+rayon = "1.10"
 
 [build-dependencies]
 cbindgen = "0.27"
