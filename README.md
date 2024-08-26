@@ -1,6 +1,6 @@
 # CORE-COMPUTE_NATIVE
 - this project is native binding generator for core-compute api
-- core implementation for Rust : https://github.com/SkillfulElectro/core-compute.git
+- core implementation : https://github.com/SkillfulElectro/core-compute.git
 
 ## GETTING STARTED
 - because core-compute apis are Rust macro functions , and we are not able to use Rust macros in C directly this project aims to give you
